@@ -26,14 +26,18 @@ public class HTMLExtractor {
 
         while( elementIterator.hasNext() ){
 
+            Elements reviewsList = elementIterator.next().getElementsByClass("partial_entry");
+
             Review review = new Review();
 
             Elements titles = elementIterator.next().getElementsByClass("quote");
             Elements users = elementIterator.next().getElementsByClass("user");
 
-
             review.title = titles.first().text();
             review.user = users.first().text();
+            review.content = reviewsList.text();
+
+            resultList.add(review);
         }
 
         return resultList;

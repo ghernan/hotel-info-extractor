@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class HTMLRetriever {
 
     public static String baseUrl;
-    private Document content;
+    public Document content;
     private WebDriver driver = new ChromeDriver();
 
     public HTMLRetriever(String urlString)  {
@@ -46,6 +46,8 @@ public class HTMLRetriever {
         return content;
     }
 
+    public void setContent(Document content) { this.content = content; }
+
     public Document prepareCommmentHTML() {
 
         WebElement more = driver.findElements(By.className("partial_entry")).get(0).findElement(By.className("taLnk"));
@@ -53,6 +55,7 @@ public class HTMLRetriever {
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.invisibilityOf(more));
         String documentString = driver.getPageSource();
+        setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);
     }
 

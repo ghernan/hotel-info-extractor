@@ -82,7 +82,7 @@ public class HTMLExtractor {
 
         String rating  = ratingElement.attr("class").split(" ")[1].split("_")[1];
 
-        return  (Integer.parseInt(rating)/10)+"";
+        return  (Double.parseDouble(rating)/10)+"";
     }
 
 

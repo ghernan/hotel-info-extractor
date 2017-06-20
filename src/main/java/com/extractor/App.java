@@ -29,7 +29,7 @@ public class App {
         HTMLRetriever retriever = new HTMLRetriever("https://www.tripadvisor.com/Hotel_Review-g31310-d239800-Reviews-Hilton_Garden_Inn_Phoenix_Midtown-Phoenix_Arizona.html");
         HTMLExtractor extractor = new HTMLExtractor();
         Element reviewCont =  retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
-        Element nearby =  retriever.prepareCommmentHTML().body().getElementById("LOCATION_TAB");
+        Element nearby =  retriever.content.body().getElementById("LOCATION_TAB");
         List<Review> reviews = extractor.extractReviews(reviewCont);
         List<Restaurant> restaurants = extractor.extractRestaurants(nearby);
 

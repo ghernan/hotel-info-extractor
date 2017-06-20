@@ -1,6 +1,7 @@
 package com.extractor;
 
 import com.extractor.managers.HTMLExtractor;
+import com.extractor.models.Attraction;
 import com.extractor.models.Restaurant;
 import com.extractor.models.Review;
 import com.extractor.services.HTMLRetriever;
@@ -31,7 +32,15 @@ public class App {
         Element reviewCont =  retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
         Element nearby =  retriever.content.body().getElementById("LOCATION_TAB");
         List<Review> reviews = extractor.extractReviews(reviewCont);
-        List<Restaurant> restaurants = extractor.extractRestaurants(nearby);
+        List<Restaurant> restaurants = (List<Restaurant>)(List<?>) extractor.extractNearby(nearby, "eatery");
+        List<Attraction> attractions = (List<Attraction>)(List<?>) extractor.extractNearby(nearby, "attraction");
+
+        retriever.changePage(2);
+        Element dummyDoc = retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
+        List<Review> reviews2 = extractor.extractReviews(dummyDoc);
+
+
+
 
         System.out.println("Lo que sea");
 

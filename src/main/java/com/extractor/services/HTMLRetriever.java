@@ -59,5 +59,16 @@ public class HTMLRetriever {
         return Jsoup.parse(documentString);
     }
 
+    public Document changePage(int pageNumber) {
+
+        WebElement pageNum = driver.findElements(By.className("pageNum")).get(pageNumber);
+        pageNum.click();
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
+        String documentString = driver.getPageSource();
+        setContent(Jsoup.parse(documentString));
+        return Jsoup.parse(documentString);
+    }
+
 
 }

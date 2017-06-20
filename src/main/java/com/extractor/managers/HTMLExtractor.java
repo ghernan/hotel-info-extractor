@@ -1,20 +1,13 @@
 package com.extractor.managers;
 
+import com.extractor.models.Attraction;
+import com.extractor.models.NearBy;
 import com.extractor.models.Restaurant;
 import com.extractor.models.Review;
 
 
-import com.extractor.services.HTMLRetriever;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,24 +47,35 @@ public class HTMLExtractor {
         return resultList;
     }
 
-    public List<Restaurant> extractRestaurants(Element element) {
+    public List<NearBy> extractNearby(Element element, String type) {
 
-        List<Restaurant> resultList = new ArrayList<Restaurant>();
-        Elements restaurantsContainers =  element.getElementsByClass("eatery");
+        List<NearBy> resultList = new ArrayList<NearBy>();
+        Elements restaurantsContainers =  element.getElementsByClass(type);
         Elements poiInfos = restaurantsContainers.first().getElementsByClass("poiInfo");
         Iterator<Element> elementIterator = poiInfos.iterator();
 
         while (elementIterator.hasNext()) {
+            NearBy nearBy;
+            switch (type) {
+                case "eatery":
+                    nearBy = new Restaurant();
+                    break;
+                case "attraction":
+                    nearBy = new Attraction();
+                    break;
+                default:
+                    nearBy = new Restaurant();
+                    break;
+            }
 
-            Restaurant restaurant = new Restaurant();
             Element poiInfo = elementIterator.next();
             Elements names = poiInfo.getElementsByClass("poiName");
             Elements ratings = poiInfo.getElementsByClass("ui_bubble_rating");
 
-            restaurant.name = names.first().text();
-            restaurant.rating = getRating(ratings.first());
+            nearBy.name = names.first().text();
+            nearBy.rating = getRating(ratings.first());
 
-            resultList.add(restaurant);
+            resultList.add(nearBy);
         }
         return  resultList;
 

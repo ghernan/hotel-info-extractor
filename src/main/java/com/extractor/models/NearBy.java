@@ -1,7 +1,7 @@
 package com.extractor.models;
 
 /**
- * Created by antoniohernandez on 6/19/17.
+ * Created by antoniohernandez on 6/20/17.
  */
 public class NearBy {
 

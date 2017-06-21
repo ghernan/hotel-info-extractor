@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -56,7 +57,11 @@ public class HTMLRetriever {
             List<WebElement> temp = entry.findElements(By.className("taLnk"));
             if ( temp.size() > 0) {
                 WebElement more = entry.findElement(By.className("taLnk"));
-                more.click();
+
+                Actions actions = new Actions(driver);
+
+                actions.moveToElement(more).click().perform();
+
                 WebDriverWait wait = new WebDriverWait(driver, 5);
                 wait.until(ExpectedConditions.invisibilityOf(more));
                 break;
@@ -69,7 +74,12 @@ public class HTMLRetriever {
 
     public Document changePage(int pageNumber) {
 
-        WebElement pageNum = driver.findElements(By.className("pageNum")).get(pageNumber);
+        List<WebElement> pages = driver.findElements(By.className("pageNum"));
+
+        int pageTChange = ( pageNumber == pages.size() )? pages.size()-1: pageNumber;
+
+        WebElement pageNum = pages.get(pageTChange);
+
         pageNum.click();
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));

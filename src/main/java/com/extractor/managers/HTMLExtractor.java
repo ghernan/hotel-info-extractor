@@ -89,8 +89,4 @@ public class HTMLExtractor {
         return  (Double.parseDouble(rating)/10)+"";
     }
 
-
-
-
-
 }

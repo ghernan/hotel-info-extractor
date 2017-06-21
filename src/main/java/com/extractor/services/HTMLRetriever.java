@@ -57,7 +57,7 @@ public class HTMLRetriever {
 
         List<WebElement> entries = driver.findElement(By.id("REVIEWS")).findElements(By.className("review-container"));
         for (WebElement entry : entries) {
-            List<WebElement> temp = entry.findElements(By.className("partial_entry")).get(0).findElements(By.className("taLnk.ulBlueLinks"));
+            List<WebElement> temp = entry.findElements(By.className("partial_entry")).get(0).findElements(By.cssSelector(".taLnk.ulBlueLinks"));
             if (temp.size() > 0) {
                 WebElement more = temp.get(0);
 

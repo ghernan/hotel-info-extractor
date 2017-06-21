@@ -69,14 +69,26 @@ public class HTMLRetriever {
 
     public Document changePage(int pageNumber) {
 
-        WebElement pageNum = driver.findElements(By.className("pageNum")).get(pageNumber);
-        pageNum.click();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
-        driver.get(driver.getCurrentUrl());
+
+        List<WebElement> elements = driver.findElements(By.tagName("data-page-number"));
+
+        for(WebElement element : elements){
+            if(element.getText().equals(pageNumber+"")){
+               WebElement pageNum = element;
+                pageNum.click();
+                WebDriverWait wait = new WebDriverWait(driver, 5);
+                wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
+                driver.get(driver.getCurrentUrl());
+                String documentString = driver.getPageSource();
+                setContent(Jsoup.parse(documentString));
+                return Jsoup.parse(documentString);
+            }
+        }
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);
+
+
     }
 
 

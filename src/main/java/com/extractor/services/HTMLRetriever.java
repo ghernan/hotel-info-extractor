@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,7 +24,7 @@ public class HTMLRetriever {
 
     public static String baseUrl;
     public Document content;
-    private WebDriver driver = new ChromeDriver();
+    private WebDriver driver = new FirefoxDriver();
 
     public HTMLRetriever(String urlString) {
 
@@ -59,7 +60,18 @@ public class HTMLRetriever {
         for (WebElement entry : entries) {
             List<WebElement> temp = entry.findElements(By.className("partial_entry")).get(0).findElements(By.cssSelector(".taLnk.ulBlueLinks"));
             if (temp.size() > 0) {
-                WebElement more = temp.get(0);
+                WebElement more;
+                more = temp
+                        .stream()
+                        .filter(element -> {
+                            if( "More".equals( element.getText() ) )
+                                return true;
+                            return false;
+                        })
+                        .findFirst().get();
+
+                if( more == null )
+                    continue;
 
                 WebDriverWait wait = new WebDriverWait(driver, 8);
 
@@ -82,12 +94,10 @@ public class HTMLRetriever {
 
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
-        driver.get(driver.getCurrentUrl());
+        driver.navigate().refresh();
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);
-
-
     }
 
     private void clickOnElement(WebElement element){

@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -50,10 +51,17 @@ public class HTMLRetriever {
 
     public Document prepareCommmentHTML() {
 
-        WebElement more = driver.findElements(By.className("partial_entry")).get(0).findElement(By.className("taLnk"));
-        more.click();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.invisibilityOf(more));
+        List<WebElement> entries = driver.findElements(By.className("partial_entry"));
+        for (WebElement entry:entries) {
+            List<WebElement> temp = entry.findElements(By.className("taLnk"));
+            if ( temp.size() > 0) {
+                WebElement more = entry.findElement(By.className("taLnk"));
+                more.click();
+                WebDriverWait wait = new WebDriverWait(driver, 5);
+                wait.until(ExpectedConditions.invisibilityOf(more));
+                break;
+            }
+        }
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);
@@ -65,6 +73,7 @@ public class HTMLRetriever {
         pageNum.click();
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
+        driver.get(driver.getCurrentUrl());
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);

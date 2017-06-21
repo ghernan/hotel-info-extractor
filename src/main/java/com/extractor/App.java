@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,17 +30,20 @@ public class App {
 
         HTMLRetriever retriever = new HTMLRetriever("https://www.tripadvisor.com/Hotel_Review-g31310-d239800-Reviews-Hilton_Garden_Inn_Phoenix_Midtown-Phoenix_Arizona.html");
         HTMLExtractor extractor = new HTMLExtractor();
-        Element reviewCont =  retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
+        List<Review> reviews = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+
+            if (i > 0) {
+
+                retriever.changePage(i);
+            }
+            Element reviewCont =  retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
+            reviews.addAll(extractor.extractReviews(reviewCont));
+        }
         Element nearby =  retriever.content.body().getElementById("LOCATION_TAB");
-        List<Review> reviews = extractor.extractReviews(reviewCont);
         List<Restaurant> restaurants = (List<Restaurant>)(List<?>) extractor.extractNearby(nearby, "eatery");
         List<Attraction> attractions = (List<Attraction>)(List<?>) extractor.extractNearby(nearby, "attraction");
-
-        retriever.changePage(2);
-        Element dummyDoc = retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
-        List<Review> reviews2 = extractor.extractReviews(dummyDoc);
-
-
 
 
         System.out.println("Lo que sea");

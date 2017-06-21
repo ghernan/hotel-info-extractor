@@ -36,9 +36,9 @@ public class App {
 
             if (i > 0) {
 
-                retriever.changePage(i);
+                retriever.changePage();
             }
-            Element reviewCont =  retriever.prepareCommmentHTML().body().getElementById("REVIEWS");
+            Element reviewCont =  retriever.prepareCommentHTML().body().getElementById("REVIEWS");
             reviews.addAll(extractor.extractReviews(reviewCont));
         }
         Element nearby =  retriever.content.body().getElementById("LOCATION_TAB");

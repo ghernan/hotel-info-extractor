@@ -96,7 +96,7 @@ public class HTMLRetriever {
         wait.until(ExpectedConditions.urlContains("or"+(pageNumber*5)));
         driver.navigate().refresh();
 //        WebDriverWait waitAfterReLoad = new WebDriverWait(driver, 6);
-//        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("taLnk.ulBlueLinks")));
+//        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".taLnk.ulBlueLinks")));
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);

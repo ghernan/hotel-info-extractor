@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.nodes.Element;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -19,9 +22,10 @@ import java.util.logging.Logger;
 public class App {
 
     public static void main(String[] args) throws Exception {
-
+        FileWriter reviewsWriter, restaurantsWriter, attractionsWriter;
+        BufferedWriter reviewsBuffer, restaurantsBuffer, attractionsBuffer;
         HashMap<String, String> hotels = getHotelHashmap();
-
+        String resultHotels = "";
         List<Review> reviews = new ArrayList<>();
         List<Restaurant> restaurants = new ArrayList<>();
         List<Attraction> attractions = new ArrayList<>();
@@ -39,7 +43,7 @@ public class App {
 
                 if (i > 0) {
 
-                    retriever.changePage();
+                    retriever.changePage(i);
                 }
                 Element reviewCont = retriever.prepareCommentHTML().body().getElementById("REVIEWS");
                 reviews.addAll(extractor.extractReviews(reviewCont));
@@ -48,11 +52,34 @@ public class App {
             restaurants.addAll((List<Restaurant>) (List<?>) extractor.extractNearby(nearby, "eatery"));
             attractions.addAll((List<Attraction>) (List<?>) extractor.extractNearby(nearby, "attraction"));
 
-            String resultHotels = getJsonFromList(reviews);
+            resultHotels = getJsonFromList(reviews);
 
             System.out.println("Otra cosa");
         }
 
+
+        reviewsWriter = new FileWriter("Reviews.json");
+        attractionsWriter = new FileWriter("Attractions.json");
+        restaurantsWriter = new FileWriter("Restaurants.json");
+        reviewsBuffer = new BufferedWriter(reviewsWriter);
+        restaurantsBuffer = new BufferedWriter(restaurantsWriter);
+        attractionsBuffer = new BufferedWriter(attractionsWriter);
+        try{
+
+            reviewsBuffer.write(resultHotels);
+            restaurantsBuffer.write(getJsonFromList(restaurants));
+            attractionsBuffer.write(getJsonFromList(attractions));
+
+
+        } catch (IOException e) {
+            System.out.println("");
+        }
+        restaurantsBuffer.close();
+        restaurantsWriter.close();
+        reviewsBuffer.close();
+        reviewsWriter.close();
+        attractionsBuffer.close();
+        attractionsWriter.close();
 
         System.out.println("Lo que sea");
     }
@@ -75,7 +102,7 @@ public class App {
         String result = "";
 
         try {
-            result = result + mapper.writeValueAsString(list);
+            result = result + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

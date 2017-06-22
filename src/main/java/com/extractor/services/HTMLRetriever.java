@@ -86,15 +86,17 @@ public class HTMLRetriever {
         return Jsoup.parse(documentString);
     }
 
-    public Document changePage() {
+    public Document changePage(int pageNumber) {
 
         WebElement pageNum = driver.findElement(By.cssSelector(".next.arrowNav"));
 
         clickOnElement(pageNum);
 
         WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("taplc_location_reviews_list_hotels_0"))));
+        wait.until(ExpectedConditions.urlContains("or"+(pageNumber*5)));
         driver.navigate().refresh();
+//        WebDriverWait waitAfterReLoad = new WebDriverWait(driver, 6);
+//        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("taLnk.ulBlueLinks")));
         String documentString = driver.getPageSource();
         setContent(Jsoup.parse(documentString));
         return Jsoup.parse(documentString);

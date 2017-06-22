@@ -71,9 +71,11 @@ public class HTMLExtractor {
             Element poiInfo = elementIterator.next();
             Elements names = poiInfo.getElementsByClass("poiName");
             Elements ratings = poiInfo.getElementsByClass("ui_bubble_rating");
+            Elements distance = poiInfo.getElementsByClass("distance");
 
             nearBy.name = names.first().text();
             nearBy.rating = getRating(ratings.first());
+            nearBy.distance = distance.first().text();
 
             resultList.add(nearBy);
         }

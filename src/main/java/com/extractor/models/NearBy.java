@@ -7,5 +7,6 @@ public class NearBy {
 
     public String name;
     public String rating;
+    public String distance;
 
 }
